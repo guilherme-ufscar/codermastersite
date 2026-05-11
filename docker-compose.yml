@@ -10,10 +10,11 @@ services:
     environment:
       - DATABASE_URL=postgresql://coder:coder_secret@db:5432/codermaster
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-codermaster-secret-change-in-production}
-      - NEXTAUTH_URL=http://localhost:10202
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:10202}
+      - AUTH_TRUST_HOST=true
       - RESEND_API_KEY=${RESEND_API_KEY:-}
       - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-noreply@codermaster.com.br}
-      - NEXT_PUBLIC_APP_URL=http://localhost:10202
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:10202}
     depends_on:
       db:
         condition: service_healthy
