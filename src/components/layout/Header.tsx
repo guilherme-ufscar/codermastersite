@@ -53,23 +53,25 @@ export default function Header() {
                   onMouseEnter={() => setDropdownOpen(true)}
                   onMouseLeave={() => setDropdownOpen(false)}
                 >
-                  <button className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1">
+                  <button className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1 py-2">
                     {link.label}
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-3.5 h-3.5 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   {dropdownOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-border py-2">
-                      {link.dropdown.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block px-4 py-2.5 text-sm text-foreground/80 hover:bg-primary/5 hover:text-primary transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
+                    <div className="absolute top-full left-0 pt-1 w-56">
+                      <div className="bg-white rounded-xl shadow-lg border border-border py-2">
+                        {link.dropdown.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block px-4 py-2.5 text-sm text-foreground/80 hover:bg-primary/5 hover:text-primary transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
