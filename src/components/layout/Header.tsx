@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -26,6 +26,21 @@ const navLinks = [
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const openDropdown = useCallback(() => {
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
+      closeTimeout.current = null;
+    }
+    setDropdownOpen(true);
+  }, []);
+
+  const closeDropdown = useCallback(() => {
+    closeTimeout.current = setTimeout(() => {
+      setDropdownOpen(false);
+    }, 150);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
@@ -50,22 +65,26 @@ export default function Header() {
                 <div
                   key={link.label}
                   className="relative"
-                  onMouseEnter={() => setDropdownOpen(true)}
-                  onMouseLeave={() => setDropdownOpen(false)}
+                  onMouseEnter={openDropdown}
+                  onMouseLeave={closeDropdown}
                 >
-                  <button className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1 py-2">
+                  <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1 py-2"
+                  >
                     {link.label}
                     <svg className={`w-3.5 h-3.5 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   {dropdownOpen && (
-                    <div className="absolute top-full left-0 pt-1 w-56">
+                    <div className="absolute top-full left-0 pt-2 w-56">
                       <div className="bg-white rounded-xl shadow-lg border border-border py-2">
                         {link.dropdown.map((item) => (
                           <Link
                             key={item.href}
                             href={item.href}
+                            onClick={() => setDropdownOpen(false)}
                             className="block px-4 py-2.5 text-sm text-foreground/80 hover:bg-primary/5 hover:text-primary transition-colors"
                           >
                             {item.label}
