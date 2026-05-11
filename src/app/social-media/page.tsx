@@ -30,12 +30,60 @@ const socialServices = [
 ];
 
 const designServices = [
-  { title: "Identidade Visual", desc: "Logo, paleta de cores, tipografia e manual de marca completo.", icon: "🎨" },
-  { title: "Logotipo", desc: "Criação de logo profissional que representa a essência do seu negócio.", icon: "✨" },
-  { title: "Cartão de Visita", desc: "Design de cartão de visita moderno e memorável.", icon: "💳" },
-  { title: "Papelaria", desc: "Timbrado, envelope, pasta e materiais impressos.", icon: "📄" },
-  { title: "Embalagens", desc: "Design de embalagens que destacam seu produto na prateleira.", icon: "📦" },
-  { title: "Materiais Digitais", desc: "Banners, thumbnails, capas e materiais para redes sociais.", icon: "🖼️" },
+  {
+    title: "Identidade Visual",
+    desc: "Logo, paleta de cores, tipografia e manual de marca completo.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+      </svg>
+    ),
+  },
+  {
+    title: "Logotipo",
+    desc: "Criação de logo profissional que representa a essência do seu negócio.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Cartão de Visita",
+    desc: "Design de cartão de visita moderno e memorável.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Papelaria",
+    desc: "Timbrado, envelope, pasta e materiais impressos.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Embalagens",
+    desc: "Design de embalagens que destacam seu produto na prateleira.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+      </svg>
+    ),
+  },
+  {
+    title: "Materiais Digitais",
+    desc: "Banners, thumbnails, capas e materiais para redes sociais.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function SocialMediaPage() {
@@ -136,8 +184,10 @@ export default function SocialMediaPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {designServices.map((service) => (
-                <div key={service.title} className="bg-white rounded-2xl p-6 border border-border hover:shadow-md transition-shadow">
-                  <span className="text-3xl mb-3 block">{service.icon}</span>
+                <div key={service.title} className="group bg-white rounded-2xl p-6 border border-border/50 hover:shadow-lg hover:border-primary/10 hover:-translate-y-0.5 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    {service.icon}
+                  </div>
                   <h3 className="font-semibold text-foreground mb-2">{service.title}</h3>
                   <p className="text-sm text-muted-foreground">{service.desc}</p>
                 </div>

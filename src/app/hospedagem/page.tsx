@@ -13,14 +13,79 @@ export const metadata: Metadata = {
 const WA = "5519995476892";
 
 const features = [
-  { title: "SSL Grátis (HTTPS)", desc: "Certificado de segurança incluso para seu site ter o cadeado verde.", icon: "🔒" },
-  { title: "Backup Automático", desc: "Seus dados protegidos com backups diários automáticos.", icon: "💾" },
-  { title: "Painel cPanel", desc: "Gerencie emails, arquivos e bancos de dados com facilidade.", icon: "⚙️" },
-  { title: "E-mail Profissional", desc: "Contas de email com seu domínio (ex: contato@suaempresa.com.br).", icon: "📧" },
-  { title: "Uptime 99.9%", desc: "Seu site sempre no ar com servidores de alta disponibilidade.", icon: "🟢" },
-  { title: "Proteção DDoS", desc: "Firewall e proteção contra ataques para manter seu site seguro.", icon: "🛡️" },
-  { title: "Suporte Técnico", desc: "Equipe pronta para ajudar via ticket, email ou WhatsApp.", icon: "🎧" },
-  { title: "Banco de Dados MySQL", desc: "Bancos de dados para seu site ou sistema funcionar perfeitamente.", icon: "🗄️" },
+  {
+    title: "SSL Grátis (HTTPS)",
+    desc: "Certificado de segurança incluso para seu site ter o cadeado verde.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Backup Automático",
+    desc: "Seus dados protegidos com backups diários automáticos.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+      </svg>
+    ),
+  },
+  {
+    title: "Painel cPanel",
+    desc: "Gerencie emails, arquivos e bancos de dados com facilidade.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
+  },
+  {
+    title: "E-mail Profissional",
+    desc: "Contas de email com seu domínio (ex: contato@suaempresa.com.br).",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+      </svg>
+    ),
+  },
+  {
+    title: "Uptime 99.9%",
+    desc: "Seu site sempre no ar com servidores de alta disponibilidade.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Proteção DDoS",
+    desc: "Firewall e proteção contra ataques para manter seu site seguro.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Suporte Técnico",
+    desc: "Equipe pronta para ajudar via ticket, email ou WhatsApp.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+      </svg>
+    ),
+  },
+  {
+    title: "Banco de Dados MySQL",
+    desc: "Bancos de dados para seu site ou sistema funcionar perfeitamente.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" />
+      </svg>
+    ),
+  },
 ];
 
 const domainExtensions = [
@@ -105,8 +170,10 @@ export default function HospedagemPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {features.map((f) => (
-                <div key={f.title} className="p-5 rounded-2xl border border-border hover:shadow-md transition-shadow">
-                  <span className="text-2xl mb-3 block">{f.icon}</span>
+                <div key={f.title} className="group p-5 rounded-2xl border border-border/50 bg-gradient-to-br from-white to-muted/30 hover:shadow-lg hover:border-primary/10 hover:-translate-y-0.5 transition-all duration-300">
+                  <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center mb-3 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    {f.icon}
+                  </div>
                   <h3 className="font-semibold text-foreground text-sm mb-1">{f.title}</h3>
                   <p className="text-xs text-muted-foreground">{f.desc}</p>
                 </div>
