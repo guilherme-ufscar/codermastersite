@@ -5,9 +5,6 @@ import ServicesSection from "@/components/home/ServicesSection";
 import HostingPlans from "@/components/home/HostingPlans";
 import DomainCheck from "@/components/home/DomainCheck";
 import PortfolioHighlights from "@/components/home/PortfolioHighlights";
-import MarketingSection from "@/components/home/MarketingSection";
-import SocialMediaSection from "@/components/home/SocialMediaSection";
-import PricingSection from "@/components/home/PricingSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import BlogHighlights from "@/components/home/BlogHighlights";
 import CTASection from "@/components/home/CTASection";
@@ -58,12 +55,9 @@ export default async function HomePage() {
       <main className="flex-1">
         <HeroSection />
         <ServicesSection />
+        <PortfolioHighlights items={portfolioItems} />
         <HostingPlans />
         <DomainCheck />
-        <PortfolioHighlights items={portfolioItems} />
-        <MarketingSection />
-        <SocialMediaSection />
-        <PricingSection />
         <TestimonialsSection />
         <BlogHighlights posts={blogPosts} />
         <CTASection />

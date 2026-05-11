@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const services = [
   {
     icon: (
@@ -7,6 +9,7 @@ const services = [
     ),
     title: "Criação de Sites",
     description: "Sites institucionais, landing pages e lojas virtuais com design moderno, responsivo e otimizado para aparecer no Google.",
+    href: "/criacao-de-sites",
   },
   {
     icon: (
@@ -17,6 +20,7 @@ const services = [
     ),
     title: "Sistemas Web",
     description: "Sistemas personalizados para automatizar processos, gerenciar dados e aumentar a produtividade do seu negócio.",
+    href: "/sistemas-web",
   },
   {
     icon: (
@@ -26,6 +30,7 @@ const services = [
     ),
     title: "Aplicativos",
     description: "Apps nativos e híbridos para Android e iOS. Leve seu negócio para o bolso dos seus clientes.",
+    href: "/aplicativos",
   },
   {
     icon: (
@@ -33,17 +38,9 @@ const services = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
       </svg>
     ),
-    title: "Hospedagem",
-    description: "Servidores rápidos e seguros com SSL grátis, backup automático e suporte técnico incluso.",
-  },
-  {
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-      </svg>
-    ),
-    title: "Loja Virtual",
-    description: "E-commerce completo com carrinho, pagamento online, controle de estoque e painel administrativo.",
+    title: "Hospedagem e Domínio",
+    description: "Servidores rápidos e seguros com SSL grátis, backup automático e suporte técnico incluso. A partir de 12x de R$29,99.",
+    href: "/hospedagem",
   },
   {
     icon: (
@@ -51,8 +48,19 @@ const services = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
       </svg>
     ),
-    title: "Domínio",
-    description: "Registro e gerenciamento de domínios .com.br, .com e outras extensões para sua marca na internet.",
+    title: "Marketing Digital",
+    description: "Google Ads, Meta Ads e SEO. Atraia clientes qualificados e aumente suas vendas com estratégias comprovadas.",
+    href: "/marketing-digital",
+  },
+  {
+    icon: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    ),
+    title: "Social Media & Design",
+    description: "Gestão de redes sociais, criação de conteúdo e identidade visual para sua marca se destacar.",
+    href: "/social-media",
   },
 ];
 
@@ -73,8 +81,9 @@ export default function ServicesSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service) => (
-            <div
+            <Link
               key={service.title}
+              href={service.href}
               className="group p-6 lg:p-8 rounded-2xl border border-border hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
             >
               <div className="w-14 h-14 rounded-xl bg-primary/5 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-white transition-colors">
@@ -83,10 +92,16 @@ export default function ServicesSection() {
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {service.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                 {service.description}
               </p>
-            </div>
+              <span className="text-sm font-medium text-primary group-hover:text-primary-light transition-colors inline-flex items-center gap-1">
+                Saiba mais
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </Link>
           ))}
         </div>
       </div>

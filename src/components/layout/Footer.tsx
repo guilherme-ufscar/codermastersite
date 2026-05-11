@@ -27,28 +27,33 @@ export default function Footer() {
             <h3 className="font-semibold text-secondary mb-4">Serviços</h3>
             <ul className="space-y-2 text-sm text-white/70">
               <li>
-                <Link href="/#servicos" className="hover:text-white transition-colors">
+                <Link href="/criacao-de-sites" className="hover:text-white transition-colors">
                   Criação de Sites
                 </Link>
               </li>
               <li>
-                <Link href="/#servicos" className="hover:text-white transition-colors">
+                <Link href="/sistemas-web" className="hover:text-white transition-colors">
                   Sistemas Web
                 </Link>
               </li>
               <li>
-                <Link href="/#servicos" className="hover:text-white transition-colors">
+                <Link href="/aplicativos" className="hover:text-white transition-colors">
                   Aplicativos
                 </Link>
               </li>
               <li>
-                <Link href="/#hospedagem" className="hover:text-white transition-colors">
-                  Hospedagem
+                <Link href="/hospedagem" className="hover:text-white transition-colors">
+                  Hospedagem e Domínio
                 </Link>
               </li>
               <li>
-                <Link href="/#marketing" className="hover:text-white transition-colors">
+                <Link href="/marketing-digital" className="hover:text-white transition-colors">
                   Marketing Digital
+                </Link>
+              </li>
+              <li>
+                <Link href="/social-media" className="hover:text-white transition-colors">
+                  Social Media & Design
                 </Link>
               </li>
             </ul>
