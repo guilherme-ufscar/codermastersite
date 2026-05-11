@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CLIENT
+}
+
+enum RecurrenceType {
+  ONE_TIME
+  MONTHLY
+  ANNUAL
+}
+
+enum PaymentMethod {
+  BOLETO
+  PIX
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  AWAITING_CLIENT
+  RESOLVED
+  CLOSED
+}
+
+enum TicketCategory {
+  MAINTENANCE
+  SUPPORT
+  BUG
+  REQUEST
+  OTHER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(CLIENT)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  invoices       Invoice[]
+  tickets        Ticket[]
+  ticketMessages TicketMessage[]
+  hostingLimits  ClientHostingLimits?
+}
+
+model BlogPost {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  content         String
+  excerpt         String?
+  coverImage      String?
+  published       Boolean   @default(false)
+  publishedAt     DateTime?
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model PortfolioCategory {
+  id    String          @id @default(cuid())
+  name  String          @unique
+  slug  String          @unique
+  items PortfolioItem[]
+}
+
+model PortfolioItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String
+  link        String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  categoryId String
+  category   PortfolioCategory @relation(fields: [categoryId], references: [id])
+}
+
+model InvoiceCategory {
+  id        String  @id @default(cuid())
+  name      String  @unique
+  isRevenue Boolean @default(true)
+
+  invoices Invoice[]
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  categoryId  String
+  category    InvoiceCategory @relation(fields: [categoryId], references: [id])
+  description String?
+  amount      Decimal       @db.Decimal(10, 2)
+  dueDate     DateTime
+  status      InvoiceStatus @default(PENDING)
+
+  recurrence         RecurrenceType @default(ONE_TIME)
+  recurrenceCount    Int            @default(1)
+  recurrenceParentId String?
+
+  paymentMethod PaymentMethod?
+  boletoFile    String?
+  pixCode       String?
+
+  paidAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Expense {
+  id                 String         @id @default(cuid())
+  description        String
+  amount             Decimal        @db.Decimal(10, 2)
+  date               DateTime
+  recurrence         RecurrenceType @default(ONE_TIME)
+  recurrenceCount    Int            @default(1)
+  recurrenceParentId String?
+  categoryName       String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+model Ticket {
+  id        String         @id @default(cuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id])
+  subject   String
+  category  TicketCategory
+  status    TicketStatus   @default(OPEN)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  messages TicketMessage[]
+}
+
+model TicketMessage {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model ClientHostingLimits {
+  id           String @id @default(cuid())
+  userId       String @unique
+  user         User   @relation(fields: [userId], references: [id])
+  maxEmails    Int    @default(0)
+  maxDatabases Int    @default(0)
+  maxSites     Int    @default(0)
+  diskSpaceMB  Int    @default(0)
+  bandwidthGB  Int    @default(0)
+}
+
+model HostingPlan {
+  id           String  @id @default(cuid())
+  name         String
+  priceMonthly Decimal @db.Decimal(10, 2)
+  priceAnnual  Decimal @db.Decimal(10, 2)
+  emails       Int
+  databases    Int
+  sites        Int
+  diskSpaceMB  Int
+  bandwidthGB  Int
+  features     String[]
+  highlighted  Boolean @default(false)
+  order        Int     @default(0)
+}

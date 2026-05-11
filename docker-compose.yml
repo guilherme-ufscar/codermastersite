@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "10202:3000"
+    environment:
+      - DATABASE_URL=postgresql://coder:coder_secret@db:5432/codermaster
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-codermaster-secret-change-in-production}
+      - NEXTAUTH_URL=http://localhost:10202
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-noreply@codermaster.com.br}
+      - NEXT_PUBLIC_APP_URL=http://localhost:10202
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/public/uploads
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=coder
+      - POSTGRES_PASSWORD=coder_secret
+      - POSTGRES_DB=codermaster
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U coder -d codermaster"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    expose:
+      - "5432"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  uploads:

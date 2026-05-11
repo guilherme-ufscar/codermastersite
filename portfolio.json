@@ -1,0 +1,236 @@
+[
+  {
+    "id": 1,
+    "titulo": "Clínica Lazio",
+    "categoria": "Landing Page",
+    "descricao": "Landing Page desenvolvida para a Clínica Lazio em Curitiba, focada em emagrecimento e bem-estar, com um visual moderno e foco total no agendamento de consultas.",
+    "imagem": "imagens/portfolio/page_025.webp",
+    "link": "https://clinicalazio.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 2,
+    "titulo": "Dany Tecidos Limeira",
+    "categoria": "E-commerce",
+    "descricao": "Loja de tecidos nacionais e importados para confecções, com foco em variedade e atendimento via WhatsApp.",
+    "imagem": "imagens/portfolio/page_002.webp",
+    "link": "https://danytecidos.com.br/",
+    "destaque": true
+  },
+  {
+    "id": 3,
+    "titulo": "Clínica Procthus",
+    "categoria": "Landing Page",
+    "descricao": "Centro médico especializado em diagnóstico e tratamento gastrointestinal e colorretal em Fortaleza.",
+    "imagem": "imagens/portfolio/page_003.webp",
+    "link": "https://procthus.com.br/",
+    "destaque": true
+  },
+  {
+    "id": 4,
+    "titulo": "Editora Lunna",
+    "categoria": "Site Institucional",
+    "descricao": "Portal de materiais didáticos e coleções escolares para educação infantil e ensinos fundamentais.",
+    "imagem": "imagens/portfolio/page_004.webp",
+    "link": "https://www.editoralunna.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 5,
+    "titulo": "Multicolor",
+    "categoria": "Site Institucional",
+    "descricao": "Indústria química especializada em masterbatches, pigmentos e aditivos para o setor de plásticos.",
+    "imagem": "imagens/portfolio/page_005.webp",
+    "link": "https://multicolor.ind.br/",
+    "destaque": true
+  },
+  {
+    "id": 6,
+    "titulo": "R-Crio",
+    "categoria": "Landing Page",
+    "descricao": "Laboratório especializado em criopreservação e cultivo de células-tronco mesenquimais.",
+    "imagem": "imagens/portfolio/page_006.webp",
+    "link": "https://www.r-crio.com/",
+    "destaque": true
+  },
+  {
+    "id": 7,
+    "titulo": "The Astronomy",
+    "categoria": "Blog",
+    "descricao": "Plataforma dedicada a notícias espaciais, tecnologias de IA e mistérios do universo.",
+    "imagem": "imagens/portfolio/page_007.webp",
+    "link": "https://codermaster.com.br/projetos/astronomy.pdf",
+    "destaque": false
+  },
+  {
+    "id": 8,
+    "titulo": "HM Imóveis",
+    "categoria": "Site Institucional",
+    "descricao": "Portal imobiliário focado na venda e locação de terrenos e casas na região de Cosmópolis-SP.",
+    "imagem": "imagens/portfolio/page_008.webp",
+    "link": "https://codermaster.com.br/projetos/hmimovel.pdf",
+    "destaque": false
+  },
+  {
+    "id": 9,
+    "titulo": "Remor Fonseca Imóveis",
+    "categoria": "Site Institucional",
+    "descricao": "Imobiliária de alto padrão focada em imóveis premium e gestão de ativos imobiliários.",
+    "imagem": "imagens/portfolio/page_009.webp",
+    "link": "https://www.remorfonsecaimoveis.com.br/",
+    "destaque": true
+  },
+  {
+    "id": 10,
+    "titulo": "Holding Familiar - Rony Cavalli",
+    "categoria": "Landing Page",
+    "descricao": "Página de captura para e-book sobre proteção patrimonial e planejamento sucessório.",
+    "imagem": "imagens/portfolio/page_010.webp",
+    "link": "https://ronypillar.com.br/holding",
+    "destaque": false
+  },
+  {
+    "id": 11,
+    "titulo": "Rénové",
+    "categoria": "Landing Page",
+    "descricao": "Marca de dermocosméticos de alto padrão baseada em tecnologia de regeneração celular.",
+    "imagem": "imagens/portfolio/page_011.webp",
+    "link": "https://renovecosmeticos.com.br/",
+    "destaque": true
+  },
+  {
+    "id": 12,
+    "titulo": "FB Conseil",
+    "categoria": "Site Institucional",
+    "descricao": "Consultoria estratégica de TI focada em transformação digital, Cloud (Move2Cloud) e performance de sistemas.",
+    "imagem": "imagens/portfolio/page_001.webp",
+    "link": "http://f8conseil.com/",
+    "destaque": true
+  },
+  {
+    "id": 13,
+    "titulo": "Cavalheiro Mozzaquatro",
+    "categoria": "Landing Page",
+    "descricao": "Clínica odontológica especializada em implantes dentários e reabilitação oral.",
+    "imagem": "imagens/portfolio/page_012.webp",
+    "link": "https://cavalheiroemozzaquatro.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 14,
+    "titulo": "Praia Park",
+    "categoria": "Site Institucional",
+    "descricao": "Parque aquático com piscinas de ondas e atrações de lazer para toda a família.",
+    "imagem": "imagens/portfolio/page_013.webp",
+    "link": "http://praiapark.codermaster.com.br/",
+    "destaque": true
+  },
+  {
+    "id": 15,
+    "titulo": "Pacífica Administradora",
+    "categoria": "Site Institucional",
+    "descricao": "Gestão de planos funerários e serviços de assistência familiar com cobertura nacional.",
+    "imagem": "imagens/portfolio/page_014.webp",
+    "link": "http://pacificaplanos.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 16,
+    "titulo": "MG Cobranças",
+    "categoria": "Landing Page",
+    "descricao": "Empresa especializada em terceirização de cobrança e soluções administrativas para empresas.",
+    "imagem": "imagens/portfolio/page_015.webp",
+    "link": "https://codermaster.com.br/projetos/mgservicos.pdf",
+    "destaque": false
+  },
+  {
+    "id": 17,
+    "titulo": "Hotel Jardim Getsemani",
+    "categoria": "Site Institucional",
+    "descricao": "Portal de hospedagem e eventos com infraestrutura de lazer, piscinas e centro de convenções.",
+    "imagem": "imagens/portfolio/page_016.webp",
+    "link": "https://codermaster.com.br/projetos/hotel.pdf",
+    "destaque": false
+  },
+  {
+    "id": 18,
+    "titulo": "APS Engenharia",
+    "categoria": "Site Institucional",
+    "descricao": "Empresa de engenharia focada em projetos industriais, montagem, manutenção e fiscalização.",
+    "imagem": "imagens/portfolio/page_017.webp",
+    "link": "https://engenhariaaps.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 19,
+    "titulo": "Brasil Saneamento",
+    "categoria": "E-commerce",
+    "descricao": "Distribuidora de tubos, válvulas e conexões em ferro fundido para infraestrutura e saneamento.",
+    "imagem": "imagens/portfolio/page_018.webp",
+    "link": "https://codermaster.com.br/projetos/brasil.pdf",
+    "destaque": true
+  },
+  {
+    "id": 20,
+    "titulo": "Saga Systems",
+    "categoria": "Site Institucional",
+    "descricao": "Soluções tecnológicas em fechaduras eletreras e cofres para o mercado hoteleiro global.",
+    "imagem": "imagens/portfolio/page_019.webp",
+    "link": "https://www.sagasystems.com.br/#/",
+    "destaque": true
+  },
+  {
+    "id": 21,
+    "titulo": "Ana Costalima",
+    "categoria": "E-commerce",
+    "descricao": "Galeria virtual de artes visuais apresentando pinturas, gravuras e esculturas em cerâmica.",
+    "imagem": "imagens/portfolio/page_020.webp",
+    "link": "https://arteanacostalima.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 22,
+    "titulo": "Jaguatêxtil",
+    "categoria": "Site Institucional",
+    "descricao": "Indústria têxtil focada em fios reciclados e produção sustentável de alta tecnologia.",
+    "imagem": "imagens/portfolio/page_021.webp",
+    "link": "https://jaguatextil.com.br/",
+    "destaque": false
+  },
+  {
+    "id": 23,
+    "titulo": "Livraria Virtual - Luiz Gualter",
+    "categoria": "E-commerce",
+    "descricao": "Loja virtual para venda de e-books e livros digitais de contos, crônicas e romances.",
+    "imagem": "imagens/portfolio/page_022.webp",
+    "link": "https://codermaster.com.br/projetos/livraria.pdf",
+    "destaque": false
+  },
+  {
+    "id": 24,
+    "titulo": "Outlotes",
+    "categoria": "Landing Page",
+    "descricao": "Plataforma de recompra de notebooks e desktops usados para empresas focada em economia circular.",
+    "imagem": "imagens/portfolio/page_023.webp",
+    "link": "https://outlotes.tmex.com.br/",
+    "destaque": true
+  },
+  {
+    "id": 25,
+    "titulo": "Grand Fantasia Infinity",
+    "categoria": "Blog",
+    "descricao": "Portal de servidor privado de MMORPG com sistema de patch notes e rankings de jogadores.",
+    "imagem": "imagens/portfolio/page_024.webp",
+    "link": "https://gfinfinity.com/",
+    "destaque": false
+  },
+  {
+    "id": 26,
+    "titulo": "Pesqueiro do Marco",
+    "categoria": "E-commerce",
+    "descricao": "Website criado para o Pesqueiro do Marco, destacando a paz da pescaria, o cardápio de porções caprichadas e o ambiente ideal para passar o dia com a família.",
+    "imagem": "imagens/portfolio/page_026.webp",
+    "link": "https://pesqueirodomarco.com/",
+    "destaque": false
+  }
+]
