@@ -10,6 +10,8 @@ export const metadata: Metadata = {
     "Hospedagem profissional com SSL grátis, backup automático e suporte técnico. Plano completo por 12x de R$29,99. Registro de domínios .com.br, .com e mais.",
 };
 
+const WA = "5519995476892";
+
 const features = [
   { title: "SSL Grátis (HTTPS)", desc: "Certificado de segurança incluso para seu site ter o cadeado verde.", icon: "🔒" },
   { title: "Backup Automático", desc: "Seus dados protegidos com backups diários automáticos.", icon: "💾" },
@@ -55,9 +57,14 @@ export default function HospedagemPage() {
                   Tudo que você precisa para manter seu site no ar: velocidade, segurança,
                   email profissional e suporte técnico. Sem surpresas.
                 </p>
-                <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero contratar o plano de hospedagem de 12x R$29,99. Como faço?")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+                >
                   Contratar Agora
-                </Link>
+                </a>
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
@@ -166,9 +173,14 @@ export default function HospedagemPage() {
             <p className="text-white/70 mb-8">
               Hospedagem profissional por apenas 12x de R$29,99. Migração gratuita inclusa.
             </p>
-            <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero contratar a hospedagem profissional. Podem me ajudar com a migração?")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+            >
               Contratar Hospedagem
-            </Link>
+            </a>
           </div>
         </section>
       </main>

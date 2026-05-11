@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     "Desenvolvimento de sistemas web sob medida para automatizar processos, gerenciar dados e aumentar a produtividade do seu negócio.",
 };
 
+const WA = "5519995476892";
+
 const solutions = [
   {
     title: "CRM e Gestão de Clientes",
@@ -72,9 +74,14 @@ export default function SistemasWebPage() {
                 personalizados que resolvem problemas reais e aumentam sua produtividade.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contato" className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center">
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Preciso de um sistema web personalizado para meu negócio. Podemos conversar?")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center"
+                >
                   Solicitar Orçamento
-                </Link>
+                </a>
                 <Link href="/portfolio" className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center">
                   Ver Projetos
                 </Link>
@@ -185,9 +192,14 @@ export default function SistemasWebPage() {
             <p className="text-white/70 mb-8">
               Conte-nos o problema e propomos a solução. Orçamento gratuito e sem compromisso.
             </p>
-            <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Tenho um processo que preciso automatizar. Podem me ajudar com um sistema web?")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+            >
               Solicitar Proposta
-            </Link>
+            </a>
           </div>
         </section>
       </main>

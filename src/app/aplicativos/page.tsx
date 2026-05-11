@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     "Desenvolvimento de aplicativos Android e iOS. Apps nativos e híbridos para levar seu negócio ao bolso dos seus clientes.",
 };
 
+const WA = "5519995476892";
+
 const appTypes = [
   {
     title: "App Nativo",
@@ -61,9 +63,14 @@ export default function AplicativosPage() {
                 e geram resultados. Do MVP ao app completo, transformamos sua ideia em realidade.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contato" className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center">
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Tenho uma ideia de aplicativo e gostaria de saber como vocês podem me ajudar.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center"
+                >
                   Quero Meu App
-                </Link>
+                </a>
                 <Link href="/portfolio" className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center">
                   Ver Projetos
                 </Link>
@@ -165,9 +172,14 @@ export default function AplicativosPage() {
             <p className="text-white/70 mb-8">
               Conte-nos sobre seu projeto. Fazemos uma análise gratuita de viabilidade e orçamento.
             </p>
-            <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Tenho uma ideia de app e gostaria de uma análise de viabilidade e orçamento.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+            >
               Falar Sobre Meu App
-            </Link>
+            </a>
           </div>
         </section>
       </main>

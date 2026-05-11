@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     "Criação de sites institucionais, landing pages e lojas virtuais. Design moderno, responsivo e otimizado para Google. Transforme visitantes em clientes.",
 };
 
+const WA = "5519995476892";
+
 const types = [
   {
     title: "Site Institucional",
@@ -63,9 +65,14 @@ export default function CriacaoDeSitesPage() {
                 negócio merece.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contato" className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center">
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Tenho interesse em criar um site profissional. Gostaria de saber mais sobre valores e prazos.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center"
+                >
                   Solicitar Orçamento
-                </Link>
+                </a>
                 <Link href="/portfolio" className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center">
                   Ver Portfólio
                 </Link>
@@ -215,9 +222,14 @@ export default function CriacaoDeSitesPage() {
             <p className="text-white/70 mb-8">
               Solicite um orçamento gratuito e sem compromisso. Respondemos em até 24h.
             </p>
-            <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero criar meu site profissional. Podem me passar um orçamento?")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+            >
               Quero Meu Site
-            </Link>
+            </a>
           </div>
         </section>
       </main>

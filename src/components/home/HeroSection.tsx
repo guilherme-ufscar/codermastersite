@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const WA = "5519995476892";
+
 export default function HeroSection() {
   return (
     <section className="relative pt-24 lg:pt-32 pb-16 lg:pb-24 overflow-hidden">
@@ -27,12 +29,14 @@ export default function HeroSection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/contato"
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero criar meu site profissional. Podem me ajudar?")}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full sm:w-auto px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center"
             >
               Quero Meu Site
-            </Link>
+            </a>
             <Link
               href="/#servicos"
               className="w-full sm:w-auto px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center"

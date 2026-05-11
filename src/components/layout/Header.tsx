@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+const WA = "5519995476892";
+
 const services = [
   { href: "/criacao-de-sites", label: "Criação de Sites" },
   { href: "/sistemas-web", label: "Sistemas Web" },
@@ -90,12 +92,14 @@ export default function Header() {
             >
               Entrar
             </Link>
-            <Link
-              href="/contato"
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Gostaria de solicitar um orçamento gratuito.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-light transition-colors"
             >
               Orçamento Grátis
-            </Link>
+            </a>
           </div>
 
           <button
@@ -141,9 +145,14 @@ export default function Header() {
               <Link href="/login" className="block text-base font-medium text-primary">
                 Entrar
               </Link>
-              <Link href="/contato" className="block w-full text-center px-5 py-2.5 bg-primary text-white font-semibold rounded-lg">
+              <a
+                href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Gostaria de solicitar um orçamento gratuito.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center px-5 py-2.5 bg-primary text-white font-semibold rounded-lg"
+              >
                 Orçamento Grátis
-              </Link>
+              </a>
             </div>
           </nav>
         </div>

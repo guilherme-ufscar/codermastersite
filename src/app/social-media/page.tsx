@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     "Gestão de redes sociais, criação de conteúdo, identidade visual e design gráfico. Sua marca com presença profissional nas redes.",
 };
 
+const WA = "5519995476892";
+
 const socialServices = [
   {
     title: "Gestão de Instagram",
@@ -62,9 +64,14 @@ export default function SocialMediaPage() {
                 sua marca se destacar, conectar com seu público e vender mais.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contato" className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center">
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero profissionalizar minhas redes sociais. Podem me enviar uma proposta?")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center"
+                >
                   Quero Gestão de Redes
-                </Link>
+                </a>
                 <Link href="/portfolio" className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center">
                   Ver Trabalhos
                 </Link>
@@ -198,9 +205,14 @@ export default function SocialMediaPage() {
             <p className="text-white/70 mb-8">
               Solicite uma proposta personalizada. Analisamos seu perfil e sugerimos a melhor estratégia.
             </p>
-            <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Gostaria de uma proposta personalizada para gestão de redes sociais e design.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+            >
               Solicitar Proposta
-            </Link>
+            </a>
           </div>
         </section>
       </main>

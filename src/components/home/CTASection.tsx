@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const WA = "5519995476892";
+
 export default function CTASection() {
   return (
     <section className="py-16 lg:py-24 bg-primary relative overflow-hidden">
@@ -19,14 +21,16 @@ export default function CTASection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/contato"
+          <a
+            href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Gostaria de solicitar um orçamento gratuito para meu projeto.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
           >
             Solicitar Orçamento Grátis
-          </Link>
+          </a>
           <a
-            href="https://wa.me/5500000000000"
+            href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Vim pelo site e gostaria de tirar algumas dúvidas.")}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors inline-flex items-center justify-center gap-2"

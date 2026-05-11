@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const WA = "5519995476892";
+
 export default function HostingPlans() {
   return (
     <section id="hospedagem" className="py-16 lg:py-24 bg-muted">
@@ -51,12 +53,14 @@ export default function HostingPlans() {
               ))}
             </ul>
 
-            <Link
-              href="/hospedagem"
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero contratar o plano de hospedagem de 12x R$29,99.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="block w-full text-center py-4 bg-secondary text-primary-dark font-bold rounded-xl hover:bg-secondary-dark transition-colors"
             >
               Contratar Hospedagem
-            </Link>
+            </a>
           </div>
         </div>
 

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     "Gestão de tráfego pago, SEO e Google Ads. Atraia clientes qualificados e aumente suas vendas com estratégias digitais comprovadas.",
 };
 
+const WA = "5519995476892";
+
 const services = [
   {
     title: "Google Ads",
@@ -68,10 +70,20 @@ export default function MarketingDigitalPage() {
                 seu negócio. Cuidamos do tráfego pago e SEO para você focar no que importa: vender.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contato" className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center">
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Quero atrair mais clientes para meu negócio com marketing digital. Podem me ajudar?")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors text-center"
+                >
                   Quero Mais Clientes
-                </Link>
-                <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center">
+                </a>
+                <a
+                  href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Vi o serviço de marketing digital de vocês e gostaria de mais informações.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-center"
+                >
                   Falar no WhatsApp
                 </a>
               </div>
@@ -182,9 +194,14 @@ export default function MarketingDigitalPage() {
             <p className="text-white/70 mb-8">
               Diagnóstico gratuito do seu marketing digital. Descubra onde você está perdendo clientes.
             </p>
-            <Link href="/contato" className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors">
+            <a
+              href={`https://wa.me/${WA}?text=${encodeURIComponent("Olá! Gostaria de um diagnóstico gratuito do meu marketing digital.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-secondary text-primary-dark font-bold rounded-lg hover:bg-secondary-dark transition-colors"
+            >
               Quero o Diagnóstico Grátis
-            </Link>
+            </a>
           </div>
         </section>
       </main>
