@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import bcrypt from "bcryptjs";
-import { resend, FROM_EMAIL } from "@/lib/resend";
+import { getResend, FROM_EMAIL } from "@/lib/resend";
 
 export async function GET() {
   const session = await auth();
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
   });
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: "Bem-vindo à Coder Master!",

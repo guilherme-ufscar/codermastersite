@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { resend, FROM_EMAIL } from "@/lib/resend";
+import { getResend, FROM_EMAIL } from "@/lib/resend";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: "contato@codermaster.com.br",
       subject: `Novo contato: ${name}`,
