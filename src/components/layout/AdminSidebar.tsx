@@ -77,8 +77,7 @@ export default function AdminSidebar() {
     <aside className="w-64 bg-white border-r border-border min-h-screen fixed left-0 top-0 z-40 hidden lg:block">
       <div className="p-6 border-b border-border">
         <Link href="/admin" className="flex items-center gap-2">
-          <Image src="/favicon.svg" alt="Coder Master" width={28} height={28} />
-          <span className="text-lg font-bold text-primary">Admin</span>
+          <Image src="/logo.svg" alt="Coder Master" width={120} height={28} className="h-7 w-auto" />
         </Link>
       </div>
 

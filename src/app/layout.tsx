@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     "site institucional",
   ],
   authors: [{ name: "Coder Master" }],
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",

@@ -48,15 +48,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/favicon.svg"
+              src="/logo.svg"
               alt="Coder Master"
-              width={36}
+              width={140}
               height={36}
-              className="w-9 h-9"
+              className="h-8 w-auto"
             />
-            <span className="text-xl font-bold text-primary hidden sm:block">
-              Coder Master
-            </span>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
