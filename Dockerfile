@@ -25,6 +25,9 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public/uploads
 
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 EXPOSE 3000
 
-CMD ["sh", "-c", "wg-quick up wg0 2>/dev/null || true; npx prisma migrate deploy && su -s /bin/sh nextjs -c 'node server.js'"]
+CMD ["/app/start.sh"]
