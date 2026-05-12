@@ -7,6 +7,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "10202:3000"
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
     environment:
       - DATABASE_URL=postgresql://coder:coder_secret@db:5432/codermaster
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-codermaster-secret-change-in-production}
@@ -15,11 +20,13 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY:-}
       - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-noreply@codermaster.com.br}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:10202}
+      - AIBEE_API_KEY=${AIBEE_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - uploads:/app/public/uploads
+      - ./wg0.conf:/etc/wireguard/wg0.conf:ro
     restart: unless-stopped
 
   db:

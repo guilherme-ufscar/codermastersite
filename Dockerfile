@@ -16,6 +16,8 @@ RUN npm ci --omit=dev
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+RUN apk add --no-cache wireguard-tools iptables
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -29,7 +31,6 @@ COPY --from=prod-deps /app/node_modules ./node_modules
 
 RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public/uploads
 
-USER nextjs
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
+CMD ["sh", "-c", "wg-quick up wg0 2>/dev/null || true; npx prisma migrate deploy && su -s /bin/sh nextjs -c 'node server.js'"]

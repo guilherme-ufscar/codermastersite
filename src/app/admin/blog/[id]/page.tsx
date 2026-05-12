@@ -44,6 +44,13 @@ export default function BlogEditorPage() {
   const [uploadingCover, setUploadingCover] = useState(false);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
+  // AI states
+  const [aiLoading, setAiLoading] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<{ title: string; description: string }[]>([]);
+  const [showImproveForm, setShowImproveForm] = useState(false);
+  const [improveTopic, setImproveTopic] = useState("");
+
   useEffect(() => {
     if (!isNew) {
       fetch(`/api/blog/${params.id}`)
@@ -80,6 +87,81 @@ export default function BlogEditorPage() {
       updates.metaDescription = text.slice(0, 160);
     }
     setForm((f) => ({ ...f, ...updates }));
+  }
+
+  function applyAiResult(result: { title?: string; content?: string }) {
+    if (result.title && result.content) {
+      setForm((f) => ({
+        ...f,
+        title: result.title!,
+        slug: generateSlug(result.title!),
+        content: result.content!,
+        excerpt: stripHtml(result.content!).slice(0, 160),
+        metaTitle: result.title!,
+        metaDescription: stripHtml(result.content!).slice(0, 160),
+      }));
+      setSlugManual(false);
+      setExcerptManual(false);
+      setSeoTitleManual(false);
+      setSeoDescManual(false);
+    }
+  }
+
+  async function handleAiSuggest() {
+    setAiLoading(true);
+    setShowSuggestions(true);
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "suggest" }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSuggestions(data.suggestions || []);
+      }
+    } catch {}
+    setAiLoading(false);
+  }
+
+  async function handleAiGenerate(topic: string) {
+    setAiLoading(true);
+    setShowSuggestions(false);
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "generate", topic }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        applyAiResult(data);
+      }
+    } catch {}
+    setAiLoading(false);
+  }
+
+  async function handleAiImprove() {
+    if (!improveTopic.trim()) return;
+    setAiLoading(true);
+    setShowImproveForm(false);
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "improve",
+          topic: improveTopic,
+          content: form.content || undefined,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        applyAiResult(data);
+      }
+    } catch {}
+    setAiLoading(false);
+    setImproveTopic("");
   }
 
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -129,9 +211,102 @@ export default function BlogEditorPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-foreground mb-6">
-        {isNew ? "Novo Post" : "Editar Post"}
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-foreground">
+          {isNew ? "Novo Post" : "Editar Post"}
+        </h1>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleAiSuggest}
+            disabled={aiLoading}
+            className="px-4 py-2 bg-violet-600 text-white text-sm font-semibold rounded-lg hover:bg-violet-700 transition-colors disabled:opacity-50"
+          >
+            {aiLoading ? "Gerando..." : "Gerar com IA"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowImproveForm(!showImproveForm)}
+            disabled={aiLoading}
+            className="px-4 py-2 border border-violet-300 text-violet-700 text-sm font-semibold rounded-lg hover:bg-violet-50 transition-colors disabled:opacity-50"
+          >
+            Aprimorar texto
+          </button>
+        </div>
+      </div>
+
+      {/* AI Suggestions modal */}
+      {showSuggestions && (
+        <div className="bg-violet-50 rounded-xl p-5 border border-violet-200 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-violet-900">Sugestões de tópicos</h3>
+            <button
+              onClick={() => setShowSuggestions(false)}
+              className="text-sm text-violet-600 hover:text-violet-800"
+            >
+              Fechar
+            </button>
+          </div>
+          {aiLoading ? (
+            <p className="text-sm text-violet-700">Consultando tendências...</p>
+          ) : suggestions.length === 0 ? (
+            <p className="text-sm text-violet-700">Nenhuma sugestão encontrada.</p>
+          ) : (
+            <div className="space-y-2">
+              {suggestions.map((s, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between bg-white rounded-lg p-3 border border-violet-100"
+                >
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">{s.title}</p>
+                    <p className="text-xs text-muted-foreground">{s.description}</p>
+                  </div>
+                  <button
+                    onClick={() => handleAiGenerate(s.title)}
+                    className="ml-3 px-3 py-1.5 text-xs bg-violet-600 text-white rounded-lg hover:bg-violet-700 flex-shrink-0"
+                  >
+                    Gerar
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* AI Improve form */}
+      {showImproveForm && (
+        <div className="bg-violet-50 rounded-xl p-5 border border-violet-200 mb-6">
+          <h3 className="font-semibold text-violet-900 mb-3">Aprimorar texto com IA</h3>
+          <p className="text-xs text-violet-700 mb-3">
+            Informe o tópico e contexto. A IA vai gerar título e conteúdo completo.
+            {form.content && " O conteúdo atual será usado como base."}
+          </p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={improveTopic}
+              onChange={(e) => setImproveTopic(e.target.value)}
+              placeholder="Ex: Por que minha empresa precisa de um site profissional"
+              className="flex-1 px-4 py-2.5 rounded-lg border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-300 bg-white"
+            />
+            <button
+              onClick={handleAiImprove}
+              disabled={!improveTopic.trim() || aiLoading}
+              className="px-4 py-2.5 bg-violet-600 text-white text-sm font-semibold rounded-lg hover:bg-violet-700 disabled:opacity-50"
+            >
+              Gerar
+            </button>
+            <button
+              onClick={() => setShowImproveForm(false)}
+              className="px-4 py-2.5 border border-violet-200 text-sm rounded-lg hover:bg-white"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
