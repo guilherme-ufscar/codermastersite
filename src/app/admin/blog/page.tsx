@@ -1,21 +1,38 @@
-import { prisma } from "@/lib/prisma";
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export default async function AdminBlogPage() {
-  let posts: any[] = [];
-  try {
-    posts = await prisma.blogPost.findMany({
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        published: true,
-        publishedAt: true,
-        createdAt: true,
-      },
-    });
-  } catch {}
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  published: boolean;
+  createdAt: string;
+}
+
+export default function AdminBlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  function loadPosts() {
+    setLoading(true);
+    fetch("/api/blog")
+      .then((r) => r.json())
+      .then((data) => setPosts(Array.isArray(data) ? data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  async function handleDelete(id: string) {
+    if (!confirm("Tem certeza que deseja excluir este post?")) return;
+    await fetch(`/api/blog/${id}`, { method: "DELETE" });
+    loadPosts();
+  }
 
   return (
     <div>
@@ -30,7 +47,9 @@ export default async function AdminBlogPage() {
       </div>
 
       <div className="bg-white rounded-xl border border-border overflow-hidden">
-        {posts.length === 0 ? (
+        {loading ? (
+          <p className="p-6 text-center text-muted-foreground">Carregando...</p>
+        ) : posts.length === 0 ? (
           <p className="p-6 text-center text-muted-foreground">
             Nenhum post criado ainda.
           </p>
@@ -72,13 +91,19 @@ export default async function AdminBlogPage() {
                   <td className="px-6 py-4 text-sm text-muted-foreground">
                     {new Date(post.createdAt).toLocaleDateString("pt-BR")}
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right space-x-3">
                     <Link
                       href={`/admin/blog/${post.id}`}
                       className="text-sm text-primary hover:text-primary-light font-medium"
                     >
                       Editar
                     </Link>
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="text-sm text-red-600 hover:text-red-700 font-medium"
+                    >
+                      Excluir
+                    </button>
                   </td>
                 </tr>
               ))}

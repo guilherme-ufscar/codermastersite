@@ -32,6 +32,27 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(category, { status: 201 });
 }
 
+export async function PUT(request: NextRequest) {
+  const session = await auth();
+  if (!session || (session.user as any)?.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { id, ...data } = body;
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  const category = await prisma.invoiceCategory.update({
+    where: { id },
+    data: {
+      name: data.name,
+      isRevenue: data.isRevenue ?? true,
+    },
+  });
+
+  return NextResponse.json(category);
+}
+
 export async function DELETE(request: NextRequest) {
   const session = await auth();
   if (!session || (session.user as any)?.role !== "ADMIN") {

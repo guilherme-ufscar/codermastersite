@@ -5,7 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Youtube from "@tiptap/extension-youtube";
 import ImageExtension from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface TipTapEditorProps {
   content: string;
@@ -15,6 +15,8 @@ interface TipTapEditorProps {
 export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [showYoutubeInput, setShowYoutubeInput] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
@@ -46,8 +48,25 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
     }
   }
 
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !editor) return;
+    setUploadingImage(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (res.ok) {
+        const { url } = await res.json();
+        editor.chain().focus().setImage({ src: url }).run();
+      }
+    } catch {}
+    setUploadingImage(false);
+    if (imageInputRef.current) imageInputRef.current.value = "";
+  }
+
   return (
-    <div className="border border-border rounded-xl overflow-hidden">
+    <div className="border border-border rounded-xl overflow-hidden bg-white">
       <div className="flex flex-wrap gap-1 p-2 bg-muted border-b border-border">
         <ToolbarButton
           active={editor.isActive("bold")}
@@ -103,12 +122,27 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
         </ToolbarButton>
         <ToolbarButton
           active={false}
+          onClick={() => imageInputRef.current?.click()}
+          title="Inserir Imagem"
+        >
+          {uploadingImage ? "..." : "🖼"}
+        </ToolbarButton>
+        <ToolbarButton
+          active={false}
           onClick={() => setShowYoutubeInput(!showYoutubeInput)}
           title="YouTube"
         >
           ▶
         </ToolbarButton>
       </div>
+
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        className="hidden"
+      />
 
       {showYoutubeInput && (
         <div className="flex gap-2 p-2 bg-muted border-b border-border">
@@ -130,7 +164,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
 
       <EditorContent
         editor={editor}
-        className="prose max-w-none p-4 min-h-[300px] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[280px]"
+        className="prose max-w-none p-4 min-h-[300px] bg-white focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[280px]"
       />
     </div>
   );

@@ -1,8 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import TipTapEditor from "@/components/blog/TipTapEditor";
+
+function generateSlug(title: string) {
+  return title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function stripHtml(html: string) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+}
 
 export default function BlogEditorPage() {
   const router = useRouter();
@@ -19,45 +34,81 @@ export default function BlogEditorPage() {
     metaTitle: "",
     metaDescription: "",
   });
+  const [slugManual, setSlugManual] = useState(false);
+  const [excerptManual, setExcerptManual] = useState(false);
+  const [seoTitleManual, setSeoTitleManual] = useState(false);
+  const [seoDescManual, setSeoDescManual] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingPost, setLoadingPost] = useState(!isNew);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!isNew) {
       fetch(`/api/blog/${params.id}`)
         .then((r) => r.json())
         .then((data) => {
-          if (data) setForm(data);
+          if (data) {
+            setForm(data);
+            if (data.slug) setSlugManual(true);
+            if (data.excerpt) setExcerptManual(true);
+            if (data.metaTitle) setSeoTitleManual(true);
+            if (data.metaDescription) setSeoDescManual(true);
+          }
           setLoadingPost(false);
         })
         .catch(() => setLoadingPost(false));
     }
   }, [isNew, params.id]);
 
-  function generateSlug(title: string) {
-    return title
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
+  function handleTitleChange(title: string) {
+    const updates: any = { title };
+    if (!slugManual) updates.slug = generateSlug(title);
+    if (!seoTitleManual) updates.metaTitle = title;
+    setForm((f) => ({ ...f, ...updates }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+  function handleContentChange(html: string) {
+    const updates: any = { content: html };
+    if (!excerptManual) {
+      const text = stripHtml(html);
+      updates.excerpt = text.slice(0, 160);
+    }
+    if (!seoDescManual) {
+      const text = stripHtml(html);
+      updates.metaDescription = text.slice(0, 160);
+    }
+    setForm((f) => ({ ...f, ...updates }));
+  }
 
+  async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingCover(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (res.ok) {
+        const { url } = await res.json();
+        setForm((f) => ({ ...f, coverImage: url }));
+      }
+    } catch {}
+    setUploadingCover(false);
+  }
+
+  async function handleSubmit(publish: boolean) {
+    setLoading(true);
     const method = isNew ? "POST" : "PUT";
     const url = isNew ? "/api/blog" : `/api/blog/${params.id}`;
 
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, published: publish }),
     });
 
     setLoading(false);
-
     if (res.ok) {
       router.push("/admin/blog");
       router.refresh();
@@ -74,7 +125,7 @@ export default function BlogEditorPage() {
         {isNew ? "Novo Post" : "Editar Post"}
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <div>
@@ -85,14 +136,8 @@ export default function BlogEditorPage() {
                 type="text"
                 required
                 value={form.title}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    title: e.target.value,
-                    slug: form.slug || generateSlug(e.target.value),
-                  })
-                }
-                className="w-full px-4 py-3 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                onChange={(e) => handleTitleChange(e.target.value)}
+                className="w-full px-4 py-3 bg-white rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
 
@@ -102,7 +147,7 @@ export default function BlogEditorPage() {
               </label>
               <TipTapEditor
                 content={form.content}
-                onChange={(html) => setForm({ ...form, content: html })}
+                onChange={handleContentChange}
               />
             </div>
           </div>
@@ -115,12 +160,32 @@ export default function BlogEditorPage() {
                 <label className="block text-sm font-medium text-foreground mb-1.5">
                   Slug
                 </label>
-                <input
-                  type="text"
-                  value={form.slug}
-                  onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={form.slug}
+                    readOnly={!slugManual}
+                    onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                    className={`flex-1 px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      !slugManual ? "bg-muted text-muted-foreground" : "bg-white"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (slugManual) {
+                        setSlugManual(false);
+                        setForm((f) => ({ ...f, slug: generateSlug(f.title) }));
+                      } else {
+                        setSlugManual(true);
+                      }
+                    }}
+                    className="px-2 py-1 text-xs border border-border rounded hover:bg-muted"
+                    title={slugManual ? "Voltar ao automático" : "Editar manualmente"}
+                  >
+                    {slugManual ? "Auto" : "Editar"}
+                  </button>
+                </div>
               </div>
 
               <div>
@@ -130,34 +195,64 @@ export default function BlogEditorPage() {
                 <textarea
                   rows={3}
                   value={form.excerpt}
+                  readOnly={!excerptManual}
                   onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                  className={`w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none ${
+                    !excerptManual ? "bg-muted text-muted-foreground" : "bg-white"
+                  }`}
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (excerptManual) {
+                      setExcerptManual(false);
+                      setForm((f) => ({ ...f, excerpt: stripHtml(f.content).slice(0, 160) }));
+                    } else {
+                      setExcerptManual(true);
+                    }
+                  }}
+                  className="mt-1 text-xs text-primary hover:text-primary-light"
+                >
+                  {excerptManual ? "Voltar ao automático" : "Editar manualmente"}
+                </button>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">
-                  Imagem de Capa (URL)
+                  Imagem de Capa
                 </label>
+                {form.coverImage && (
+                  <div className="mb-2 relative">
+                    <img
+                      src={form.coverImage}
+                      alt="Capa"
+                      className="w-full h-32 object-cover rounded-lg border border-border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setForm({ ...form, coverImage: "" })}
+                      className="absolute top-1 right-1 w-6 h-6 bg-red-600 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-700"
+                    >
+                      X
+                    </button>
+                  </div>
+                )}
                 <input
-                  type="text"
-                  value={form.coverImage}
-                  onChange={(e) => setForm({ ...form, coverImage: e.target.value })}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  ref={coverInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverUpload}
+                  className="hidden"
                 />
+                <button
+                  type="button"
+                  onClick={() => coverInputRef.current?.click()}
+                  disabled={uploadingCover}
+                  className="w-full px-3 py-2 text-sm border border-dashed border-border rounded-lg hover:bg-muted transition-colors disabled:opacity-50"
+                >
+                  {uploadingCover ? "Enviando..." : "Fazer upload de imagem"}
+                </button>
               </div>
-
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={form.published}
-                  onChange={(e) => setForm({ ...form, published: e.target.checked })}
-                  className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
-                />
-                <span className="text-sm font-medium text-foreground">
-                  Publicar
-                </span>
-              </label>
             </div>
 
             <div className="bg-white rounded-xl p-5 border border-border space-y-4">
@@ -169,9 +264,26 @@ export default function BlogEditorPage() {
                 <input
                   type="text"
                   value={form.metaTitle}
+                  readOnly={!seoTitleManual}
                   onChange={(e) => setForm({ ...form, metaTitle: e.target.value })}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className={`w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                    !seoTitleManual ? "bg-muted text-muted-foreground" : "bg-white"
+                  }`}
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (seoTitleManual) {
+                      setSeoTitleManual(false);
+                      setForm((f) => ({ ...f, metaTitle: f.title }));
+                    } else {
+                      setSeoTitleManual(true);
+                    }
+                  }}
+                  className="mt-1 text-xs text-primary hover:text-primary-light"
+                >
+                  {seoTitleManual ? "Voltar ao automático" : "Editar manualmente"}
+                </button>
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">
@@ -180,11 +292,26 @@ export default function BlogEditorPage() {
                 <textarea
                   rows={2}
                   value={form.metaDescription}
-                  onChange={(e) =>
-                    setForm({ ...form, metaDescription: e.target.value })
-                  }
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                  readOnly={!seoDescManual}
+                  onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
+                  className={`w-full px-3 py-2 text-sm rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none ${
+                    !seoDescManual ? "bg-muted text-muted-foreground" : "bg-white"
+                  }`}
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (seoDescManual) {
+                      setSeoDescManual(false);
+                      setForm((f) => ({ ...f, metaDescription: stripHtml(f.content).slice(0, 160) }));
+                    } else {
+                      setSeoDescManual(true);
+                    }
+                  }}
+                  className="mt-1 text-xs text-primary hover:text-primary-light"
+                >
+                  {seoDescManual ? "Voltar ao automático" : "Editar manualmente"}
+                </button>
               </div>
             </div>
           </div>
@@ -192,21 +319,30 @@ export default function BlogEditorPage() {
 
         <div className="flex gap-3">
           <button
-            type="submit"
-            disabled={loading}
+            type="button"
+            onClick={() => handleSubmit(false)}
+            disabled={loading || !form.title || !form.content}
+            className="px-6 py-3 border border-border text-foreground font-semibold rounded-lg hover:bg-muted transition-colors disabled:opacity-50"
+          >
+            {loading ? "Salvando..." : "Salvar Rascunho"}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSubmit(true)}
+            disabled={loading || !form.title || !form.content}
             className="px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-light transition-colors disabled:opacity-50"
           >
-            {loading ? "Salvando..." : "Salvar"}
+            {loading ? "Salvando..." : "Salvar e Publicar"}
           </button>
           <button
             type="button"
             onClick={() => router.push("/admin/blog")}
-            className="px-6 py-3 border border-border text-foreground font-semibold rounded-lg hover:bg-muted transition-colors"
+            className="px-6 py-3 text-muted-foreground font-semibold rounded-lg hover:bg-muted transition-colors"
           >
             Cancelar
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

@@ -97,3 +97,40 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(expense, { status: 201 });
 }
+
+export async function PUT(request: NextRequest) {
+  const session = await auth();
+  if (!session || (session.user as any)?.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { id, ...data } = body;
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  const expense = await prisma.expense.update({
+    where: { id },
+    data: {
+      description: data.description,
+      amount: data.amount,
+      date: data.date ? new Date(data.date) : undefined,
+      categoryName: data.categoryName || null,
+    },
+  });
+
+  return NextResponse.json(expense);
+}
+
+export async function DELETE(request: NextRequest) {
+  const session = await auth();
+  if (!session || (session.user as any)?.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  await prisma.expense.delete({ where: { id } });
+  return NextResponse.json({ success: true });
+}

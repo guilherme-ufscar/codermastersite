@@ -89,3 +89,44 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(mainInvoice, { status: 201 });
 }
+
+export async function PUT(request: NextRequest) {
+  const session = await auth();
+  if (!session || (session.user as any)?.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { id, ...data } = body;
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  const invoice = await prisma.invoice.update({
+    where: { id },
+    data: {
+      description: data.description || null,
+      amount: data.amount,
+      dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+      status: data.status,
+      paymentMethod: data.paymentMethod || null,
+      pixCode: data.pixCode || null,
+      boletoFile: data.boletoFile || null,
+      paidAt: data.status === "PAID" ? new Date() : null,
+    },
+  });
+
+  return NextResponse.json(invoice);
+}
+
+export async function DELETE(request: NextRequest) {
+  const session = await auth();
+  if (!session || (session.user as any)?.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  await prisma.invoice.delete({ where: { id } });
+  return NextResponse.json({ success: true });
+}

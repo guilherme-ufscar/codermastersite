@@ -13,32 +13,47 @@ interface Client {
 
 export default function AdminClientesPage() {
   const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  function loadClients() {
+    setLoading(true);
     fetch("/api/clientes")
       .then((r) => r.json())
-      .then(setClients)
-      .catch(() => {});
+      .then((data) => setClients(Array.isArray(data) ? data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    loadClients();
   }, []);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
     const res = await fetch("/api/clientes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
     if (res.ok) {
-      const newClient = await res.json();
-      setClients([newClient, ...clients]);
       setForm({ name: "", email: "", password: "" });
       setShowForm(false);
+      loadClients();
+    } else {
+      const err = await res.json().catch(() => null);
+      if (err?.error) alert(err.error);
     }
-    setLoading(false);
+    setSaving(false);
+  }
+
+  async function handleDelete(id: string, name: string) {
+    if (!confirm(`Tem certeza que deseja excluir o cliente "${name}"?`)) return;
+    await fetch(`/api/clientes/${id}`, { method: "DELETE" });
+    loadClients();
   }
 
   return (
@@ -58,6 +73,7 @@ export default function AdminClientesPage() {
           onSubmit={handleCreate}
           className="bg-white rounded-xl p-6 border border-border mb-6 space-y-4"
         >
+          <h3 className="font-semibold text-foreground">Novo Cliente</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
               type="text"
@@ -87,10 +103,10 @@ export default function AdminClientesPage() {
           <div className="flex gap-2">
             <button
               type="submit"
-              disabled={loading}
+              disabled={saving}
               className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-light disabled:opacity-50"
             >
-              {loading ? "Criando..." : "Criar Cliente"}
+              {saving ? "Criando..." : "Criar Cliente"}
             </button>
             <button
               type="button"
@@ -101,13 +117,15 @@ export default function AdminClientesPage() {
             </button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Um email de boas-vindas será enviado automaticamente.
+            Um email de boas-vindas sera enviado automaticamente.
           </p>
         </form>
       )}
 
       <div className="bg-white rounded-xl border border-border overflow-hidden">
-        {clients.length === 0 ? (
+        {loading ? (
+          <p className="p-6 text-center text-muted-foreground">Carregando...</p>
+        ) : clients.length === 0 ? (
           <p className="p-6 text-center text-muted-foreground">
             Nenhum cliente cadastrado.
           </p>
@@ -123,6 +141,9 @@ export default function AdminClientesPage() {
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase">
                   Status
+                </th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase">
+                  Criado em
                 </th>
                 <th className="text-right px-6 py-3 text-xs font-medium text-muted-foreground uppercase">
                   Ações
@@ -149,13 +170,28 @@ export default function AdminClientesPage() {
                       {client.active ? "Ativo" : "Inativo"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-sm text-muted-foreground">
+                    {new Date(client.createdAt).toLocaleDateString("pt-BR")}
+                  </td>
+                  <td className="px-6 py-4 text-right space-x-3">
                     <Link
                       href={`/admin/clientes/${client.id}`}
                       className="text-sm text-primary hover:text-primary-light font-medium"
                     >
-                      Gerenciar
+                      Editar
                     </Link>
+                    <Link
+                      href={`/admin/clientes/${client.id}`}
+                      className="text-sm text-muted-foreground hover:text-foreground font-medium"
+                    >
+                      Faturas
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(client.id, client.name)}
+                      className="text-sm text-red-600 hover:text-red-700 font-medium"
+                    >
+                      Excluir
+                    </button>
                   </td>
                 </tr>
               ))}

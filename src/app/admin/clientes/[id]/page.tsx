@@ -9,6 +9,9 @@ export default function AdminClienteDetailPage() {
   const [client, setClient] = useState<any>(null);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editForm, setEditForm] = useState({ name: "", email: "", active: true });
+  const [editLoading, setEditLoading] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [form, setForm] = useState({
     categoryId: "",
@@ -22,11 +25,18 @@ export default function AdminClienteDetailPage() {
   });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  function loadClient() {
     fetch(`/api/clientes/${params.id}`)
       .then((r) => r.json())
-      .then(setClient)
+      .then((data) => {
+        setClient(data);
+        setEditForm({ name: data.name || "", email: data.email || "", active: data.active ?? true });
+      })
       .catch(() => {});
+  }
+
+  useEffect(() => {
+    loadClient();
 
     fetch(`/api/faturas?userId=${params.id}`)
       .then((r) => r.json())
@@ -38,6 +48,21 @@ export default function AdminClienteDetailPage() {
       .then(setCategories)
       .catch(() => {});
   }, [params.id]);
+
+  async function handleEditClient(e: React.FormEvent) {
+    e.preventDefault();
+    setEditLoading(true);
+    const res = await fetch(`/api/clientes/${params.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editForm),
+    });
+    if (res.ok) {
+      loadClient();
+      setShowEditForm(false);
+    }
+    setEditLoading(false);
+  }
 
   async function handleCreateInvoice(e: React.FormEvent) {
     e.preventDefault();
@@ -83,14 +108,81 @@ export default function AdminClienteDetailPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">{client.name}</h1>
           <p className="text-muted-foreground text-sm">{client.email}</p>
+          <span
+            className={`inline-flex mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${
+              client.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+            }`}
+          >
+            {client.active ? "Ativo" : "Inativo"}
+          </span>
         </div>
-        <button
-          onClick={() => setShowInvoiceForm(!showInvoiceForm)}
-          className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-light"
-        >
-          + Nova Fatura
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowEditForm(!showEditForm)}
+            className="px-4 py-2 border border-border text-sm font-semibold rounded-lg hover:bg-muted"
+          >
+            Editar Cliente
+          </button>
+          <button
+            onClick={() => setShowInvoiceForm(!showInvoiceForm)}
+            className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-light"
+          >
+            + Nova Fatura
+          </button>
+        </div>
       </div>
+
+      {showEditForm && (
+        <form
+          onSubmit={handleEditClient}
+          className="bg-white rounded-xl p-6 border border-border mb-6 space-y-4"
+        >
+          <h3 className="font-semibold text-foreground">Editar Cliente</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input
+              type="text"
+              placeholder="Nome"
+              required
+              value={editForm.name}
+              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+              className="px-4 py-2.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              value={editForm.email}
+              onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+              className="px-4 py-2.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={editForm.active}
+                onChange={(e) => setEditForm({ ...editForm, active: e.target.checked })}
+                className="w-4 h-4 rounded border-border text-primary"
+              />
+              <span className="text-sm">Ativo</span>
+            </label>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              disabled={editLoading}
+              className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg disabled:opacity-50"
+            >
+              {editLoading ? "Salvando..." : "Salvar"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowEditForm(false)}
+              className="px-4 py-2 border border-border text-sm font-semibold rounded-lg hover:bg-muted"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
 
       {showInvoiceForm && (
         <form
