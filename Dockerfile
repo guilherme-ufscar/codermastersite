@@ -2,16 +2,10 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 RUN npx prisma generate
 COPY . .
 RUN npm run build
-
-FROM node:20-alpine AS prod-deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-COPY prisma ./prisma
-RUN npm ci --omit=dev
 
 FROM node:20-alpine AS runner
 WORKDIR /app
@@ -27,7 +21,7 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/portfolio.json ./portfolio.json
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public/uploads
 
