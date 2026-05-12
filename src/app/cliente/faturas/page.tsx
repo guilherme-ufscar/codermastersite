@@ -84,7 +84,8 @@ export default function ClienteFaturasPage() {
                   {inv.paymentMethod === "BOLETO" && inv.boletoFile && (
                     <a
                       href={inv.boletoFile}
-                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary text-xs font-medium rounded-lg hover:bg-primary/10"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 
 export default function AdminClienteDetailPage() {
   const params = useParams();
@@ -10,7 +9,7 @@ export default function AdminClienteDetailPage() {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-  const [editForm, setEditForm] = useState({ name: "", email: "", active: true });
+  const [editForm, setEditForm] = useState({ name: "", email: "", active: true, password: "" });
   const [editLoading, setEditLoading] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [form, setForm] = useState({
@@ -22,26 +21,32 @@ export default function AdminClienteDetailPage() {
     recurrenceCount: "1",
     paymentMethod: "PIX",
     pixCode: "",
+    boletoFile: "",
   });
   const [loading, setLoading] = useState(false);
+  const [uploadingBoleto, setUploadingBoleto] = useState(false);
+  const boletoInputRef = useRef<HTMLInputElement>(null);
 
   function loadClient() {
     fetch(`/api/clientes/${params.id}`)
       .then((r) => r.json())
       .then((data) => {
         setClient(data);
-        setEditForm({ name: data.name || "", email: data.email || "", active: data.active ?? true });
+        setEditForm({ name: data.name || "", email: data.email || "", active: data.active ?? true, password: "" });
       })
+      .catch(() => {});
+  }
+
+  function loadInvoices() {
+    fetch(`/api/faturas?userId=${params.id}`)
+      .then((r) => r.json())
+      .then(setInvoices)
       .catch(() => {});
   }
 
   useEffect(() => {
     loadClient();
-
-    fetch(`/api/faturas?userId=${params.id}`)
-      .then((r) => r.json())
-      .then(setInvoices)
-      .catch(() => {});
+    loadInvoices();
 
     fetch("/api/categorias/faturas")
       .then((r) => r.json())
@@ -52,16 +57,35 @@ export default function AdminClienteDetailPage() {
   async function handleEditClient(e: React.FormEvent) {
     e.preventDefault();
     setEditLoading(true);
+    const payload: any = { name: editForm.name, email: editForm.email, active: editForm.active };
+    if (editForm.password) payload.password = editForm.password;
+
     const res = await fetch(`/api/clientes/${params.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editForm),
+      body: JSON.stringify(payload),
     });
     if (res.ok) {
       loadClient();
       setShowEditForm(false);
     }
     setEditLoading(false);
+  }
+
+  async function handleBoletoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingBoleto(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (res.ok) {
+        const { url } = await res.json();
+        setForm((f) => ({ ...f, boletoFile: url }));
+      }
+    } catch {}
+    setUploadingBoleto(false);
   }
 
   async function handleCreateInvoice(e: React.FormEvent) {
@@ -79,12 +103,12 @@ export default function AdminClienteDetailPage() {
         recurrence: form.recurrence,
         recurrenceCount: parseInt(form.recurrenceCount),
         paymentMethod: form.paymentMethod,
-        pixCode: form.pixCode,
+        pixCode: form.paymentMethod === "PIX" ? form.pixCode : null,
+        boletoFile: form.paymentMethod === "BOLETO" ? form.boletoFile : null,
       }),
     });
     if (res.ok) {
-      const updated = await fetch(`/api/faturas?userId=${params.id}`);
-      setInvoices(await updated.json());
+      loadInvoices();
       setShowInvoiceForm(false);
       setForm({
         categoryId: "",
@@ -95,6 +119,7 @@ export default function AdminClienteDetailPage() {
         recurrenceCount: "1",
         paymentMethod: "PIX",
         pixCode: "",
+        boletoFile: "",
       });
     }
     setLoading(false);
@@ -138,7 +163,7 @@ export default function AdminClienteDetailPage() {
           className="bg-white rounded-xl p-6 border border-border mb-6 space-y-4"
         >
           <h3 className="font-semibold text-foreground">Editar Cliente</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
               placeholder="Nome"
@@ -153,6 +178,13 @@ export default function AdminClienteDetailPage() {
               required
               value={editForm.email}
               onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+              className="px-4 py-2.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+            <input
+              type="text"
+              placeholder="Nova senha (deixe vazio para manter)"
+              value={editForm.password}
+              onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
               className="px-4 py-2.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
             <label className="flex items-center gap-2">
@@ -189,6 +221,7 @@ export default function AdminClienteDetailPage() {
           onSubmit={handleCreateInvoice}
           className="bg-white rounded-xl p-6 border border-border mb-6 space-y-4"
         >
+          <h3 className="font-semibold text-foreground">Nova Fatura</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <select
               required
@@ -256,11 +289,33 @@ export default function AdminClienteDetailPage() {
             {form.paymentMethod === "PIX" && (
               <input
                 type="text"
-                placeholder="Código PIX"
+                placeholder="Código PIX (copia e cola)"
                 value={form.pixCode}
                 onChange={(e) => setForm({ ...form, pixCode: e.target.value })}
                 className="px-4 py-2.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
+            )}
+            {form.paymentMethod === "BOLETO" && (
+              <div className="flex flex-col gap-1">
+                {form.boletoFile && (
+                  <p className="text-xs text-green-600">PDF enviado: {form.boletoFile}</p>
+                )}
+                <input
+                  ref={boletoInputRef}
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleBoletoUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => boletoInputRef.current?.click()}
+                  disabled={uploadingBoleto}
+                  className="px-4 py-2.5 text-sm border border-dashed border-border rounded-lg hover:bg-muted disabled:opacity-50"
+                >
+                  {uploadingBoleto ? "Enviando..." : "Upload PDF do Boleto"}
+                </button>
+              </div>
             )}
           </div>
           <div className="flex gap-2">

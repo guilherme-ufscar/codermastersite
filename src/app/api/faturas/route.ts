@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
     recurrenceCount,
     paymentMethod,
     pixCode,
+    boletoFile,
   } = body;
 
   const mainInvoice = await prisma.invoice.create({
@@ -59,6 +60,7 @@ export async function POST(request: NextRequest) {
       recurrenceCount: recurrenceCount || 1,
       paymentMethod: paymentMethod || null,
       pixCode: pixCode || null,
+      boletoFile: boletoFile || null,
     },
   });
 
@@ -82,6 +84,7 @@ export async function POST(request: NextRequest) {
           recurrenceParentId: mainInvoice.id,
           paymentMethod: paymentMethod || null,
           pixCode: pixCode || null,
+          boletoFile: boletoFile || null,
         },
       });
     }
