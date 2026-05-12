@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 const portfolioData = JSON.parse(
-  readFileSync(join(__dirname, "..", "portfolio.json"), "utf-8")
+  readFileSync(join(process.cwd(), "portfolio.json"), "utf-8")
 );
 
 const prisma = new PrismaClient();
