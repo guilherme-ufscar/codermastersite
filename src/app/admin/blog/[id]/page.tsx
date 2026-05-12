@@ -16,7 +16,8 @@ function generateSlug(title: string) {
 function stripHtml(html: string) {
   const div = document.createElement("div");
   div.innerHTML = html;
-  return div.textContent || div.innerText || "";
+  const text = div.textContent || div.innerText || "";
+  return text.replace(/\s+/g, " ").trim();
 }
 
 export default function BlogEditorPage() {
@@ -102,10 +103,17 @@ export default function BlogEditorPage() {
     const method = isNew ? "POST" : "PUT";
     const url = isNew ? "/api/blog" : `/api/blog/${params.id}`;
 
+    const payload = {
+      ...form,
+      published: publish,
+      excerpt: (form.excerpt || "").slice(0, 160),
+      metaDescription: (form.metaDescription || "").slice(0, 160),
+    };
+
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, published: publish }),
+      body: JSON.stringify(payload),
     });
 
     setLoading(false);
