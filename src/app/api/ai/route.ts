@@ -114,22 +114,26 @@ Responda APENAS o JSON, sem texto adicional.`,
       const response = await callClaude([
         {
           role: "user",
-          content: `Melhore e expanda o seguinte conteúdo de blog post.
+          content: `Aprimore e melhore o seguinte conteúdo de blog post já existente.
 
-Tópico/Contexto: "${topic}"
+Título atual: "${topic}"
 ${content ? `\nConteúdo atual:\n${content}` : ""}
 
-Gere um post completo e aprimorado que:
-- Tenha um título atrativo e otimizado para SEO
-- Tenha entre 800-1200 palavras
-- Use subtítulos (H2, H3) para organizar o conteúdo
-- Seja escrito em HTML simples (p, h2, h3, ul, li, strong, em)
-- Mantenha o tom acessível para leigos em tecnologia
-- Inclua exemplos práticos
-- Tenha uma conclusão com call-to-action
+Você deve:
+- Manter a essência e o tema do texto original
+- Melhorar a clareza, fluidez e persuasão do texto
+- Corrigir erros gramaticais se houver
+- Otimizar para SEO mantendo naturalidade
+- Melhorar subtítulos e estrutura se necessário
+- Manter entre 800-1200 palavras
+- Usar HTML simples (p, h2, h3, ul, li, strong, em)
+- Manter o tom acessível para leigos em tecnologia
+- Melhorar a conclusão com call-to-action
+
+NÃO gere um texto completamente novo. Aprimore o que já existe.
 
 Responda em formato JSON assim:
-{"title": "...", "content": "...HTML do conteúdo..."}
+{"title": "...título aprimorado...", "content": "...HTML do conteúdo aprimorado..."}
 
 Responda APENAS o JSON, sem texto adicional.`,
         },

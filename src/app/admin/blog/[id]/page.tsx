@@ -48,8 +48,6 @@ export default function BlogEditorPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<{ title: string; description: string }[]>([]);
-  const [showImproveForm, setShowImproveForm] = useState(false);
-  const [improveTopic, setImproveTopic] = useState("");
 
   useEffect(() => {
     if (!isNew) {
@@ -142,16 +140,15 @@ export default function BlogEditorPage() {
   }
 
   async function handleAiImprove() {
-    if (!improveTopic.trim()) return;
+    if (!form.title.trim() && !form.content.trim()) return;
     setAiLoading(true);
-    setShowImproveForm(false);
     try {
       const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "improve",
-          topic: improveTopic,
+          topic: form.title,
           content: form.content || undefined,
         }),
       });
@@ -161,7 +158,6 @@ export default function BlogEditorPage() {
       }
     } catch {}
     setAiLoading(false);
-    setImproveTopic("");
   }
 
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -226,9 +222,10 @@ export default function BlogEditorPage() {
           </button>
           <button
             type="button"
-            onClick={() => setShowImproveForm(!showImproveForm)}
-            disabled={aiLoading}
+            onClick={handleAiImprove}
+            disabled={aiLoading || (!form.title.trim() && !form.content.trim())}
             className="px-4 py-2 border border-violet-300 text-violet-700 text-sm font-semibold rounded-lg hover:bg-violet-50 transition-colors disabled:opacity-50"
+            title={!form.title.trim() && !form.content.trim() ? "Preencha o título ou conteúdo primeiro" : "Aprimorar o texto atual com IA"}
           >
             Aprimorar texto
           </button>
@@ -275,38 +272,6 @@ export default function BlogEditorPage() {
         </div>
       )}
 
-      {/* AI Improve form */}
-      {showImproveForm && (
-        <div className="bg-violet-50 rounded-xl p-5 border border-violet-200 mb-6">
-          <h3 className="font-semibold text-violet-900 mb-3">Aprimorar texto com IA</h3>
-          <p className="text-xs text-violet-700 mb-3">
-            Informe o tópico e contexto. A IA vai gerar título e conteúdo completo.
-            {form.content && " O conteúdo atual será usado como base."}
-          </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={improveTopic}
-              onChange={(e) => setImproveTopic(e.target.value)}
-              placeholder="Ex: Por que minha empresa precisa de um site profissional"
-              className="flex-1 px-4 py-2.5 rounded-lg border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-300 bg-white"
-            />
-            <button
-              onClick={handleAiImprove}
-              disabled={!improveTopic.trim() || aiLoading}
-              className="px-4 py-2.5 bg-violet-600 text-white text-sm font-semibold rounded-lg hover:bg-violet-700 disabled:opacity-50"
-            >
-              Gerar
-            </button>
-            <button
-              onClick={() => setShowImproveForm(false)}
-              className="px-4 py-2.5 border border-violet-200 text-sm rounded-lg hover:bg-white"
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
